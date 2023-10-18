@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BackGround
   - Obstacle
+  - ScoreLine
   layers:
   - Default
   - TransparentFX

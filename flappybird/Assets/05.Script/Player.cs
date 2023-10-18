@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Player : MonoBehaviour
 {
@@ -12,16 +14,17 @@ public class Player : MonoBehaviour
     //트리거 충돌 유무
 
     private Rigidbody2D _rigid;
-    private CapsuleCollider2D _col;
-    [SerializeField]private float _fallSpeed;
     [SerializeField]private float _jumpForce;
-    [SerializeField]private bool _isCollision;
-    
+
+    public void Start()
+    {
+        transform.position = Vector3.zero;
+        _rigid.velocity= Vector3.zero;
+    }
 
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody2D>();
-        _col= GetComponent<CapsuleCollider2D>();
     }
 
 
@@ -38,9 +41,18 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Obstacle"))
+        if (collision.CompareTag("Obstacle"))
         {
-            Debug.Log("col");
+            Debug.Log("Death");
+            GameManager.Instance.OnGameOver?.Invoke();
+        }
+        else if (collision.CompareTag("ScoreLine"))
+        {
+            Debug.Log("Plus");
+            if (GameManager.Instance.OnScoreUp != null)
+            {
+                GameManager.Instance.OnScoreUp.Invoke();
+            }
         }
     }
 
